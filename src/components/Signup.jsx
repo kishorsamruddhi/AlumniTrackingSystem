@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { baseUrl } from '../utils/globalurl';
 
 const Signup = () => {
     const [values, setValues] = useState({
@@ -10,41 +8,41 @@ const Signup = () => {
         email: "",
         password: "",
         userType: "",
-        course_id: "",
+        alumnusPlaceholder: ""
     });
-    const [courses, setCourses] = useState([]);
-
 
     const navigate = useNavigate();
 
+    // Frontend-only signup function (stores user in localStorage)
+    const signup = (email, password) => {
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        
+        // Check if user already exists
+        if (users.some(user => user.email === email)) {
+            toast.warning("User already exists!");
+            return;
+        }
+
+        // Save new user
+        users.push({ email, password });
+        localStorage.setItem("users", JSON.stringify(users));
+
+        toast.success("Signup successful!");
+        navigate("/alumni"); // Redirect after signup
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(values);
-        axios.post(`${baseUrl}auth/signup`, values)
-            .then((res) => {
-                if (res.data.email) {
-                    return toast.warning("Email Already Exists");
-                }
-                if (res.data.signupStatus) {
-                    toast.success(res.data.message);
-                    setTimeout(() => {
-                        navigate("/login", { state: { action: "navtologin" } })
-                    }, 2000)
-                } else {
-                    toast.error("An error occurred");
-                }
-            })
-            .catch(err => console.log(err))
-    }
+        
+        // Ensure required fields are filled
+        if (!values.email || !values.password) {
+            toast.error("Please fill in all required fields.");
+            return;
+        }
 
-    useEffect(() => {
-        axios.get(`${baseUrl}auth/courses`)
-            .then((res) => {
-                setCourses(res.data);
-            })
-            .catch(err => console.log(err))
-    }, [])
-
+        // Call the local signup function
+        signup(values.email, values.password);
+    };
 
     return (
         <>
@@ -81,22 +79,17 @@ const Signup = () => {
                                         <div className="form-group">
                                             <label htmlFor="userType" className="control-label">User Type</label>
                                             <select onChange={(e) => setValues({ ...values, userType: e.target.value })} className="custom-select" id="userType" name="userType" required defaultValue="">
-                                                <option value="" disabled>Please select</option>
+                                                <option value="" disabled hidden>Please select</option>
                                                 <option value="alumnus">Alumnus</option>
                                                 <option value="admin">Admin</option>
                                             </select>
                                         </div>
-                                        {values.userType === "alumnus" &&
+                                        {values.userType === "alumnus" && (
                                             <div className="form-group">
-                                                <label htmlFor="course_id" className="control-label">Course</label>
-                                                <select onChange={(e) => setValues({ ...values, course_id: e.target.value })} className="form-control select2" name="course_id" required value={values.course_id}>
-                                                    <option disabled value="">Select course</option>
-                                                    {courses.map(c => (
-                                                        <option key={c.id} value={c.id}>{c.course}</option>
-                                                    ))}
-                                                </select>
+                                                <label htmlFor="alumnusPlaceholder" className="control-label">Branch/Course</label>
+                                                <input onChange={(e) => setValues({ ...values, alumnusPlaceholder: e.target.value })} type="text" className="form-control" id="alumnusPlaceholder" name="alumnusPlaceholder" placeholder="Branch/Course" required />
                                             </div>
-                                        }
+                                        )}
                                         <hr className="divider" />
                                         <div className="row justify-content-center">
                                             <div className="col-md-6 text-center">
@@ -111,7 +104,7 @@ const Signup = () => {
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
-export default Signup
+export default Signup;

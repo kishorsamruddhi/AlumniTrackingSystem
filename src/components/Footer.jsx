@@ -1,54 +1,67 @@
 import React from 'react';
-import { FaEnvelope, FaPhone } from 'react-icons/fa';
+import { FaEnvelope, FaPhone, FaLinkedin, FaTwitter, FaGithub, FaMapMarkerAlt } from 'react-icons/fa';
+import { GoVerified } from 'react-icons/go';
 import { useTheme } from '../ThemeContext';
-import { GoVerified } from "react-icons/go";
-
 
 const Footer = () => {
   const { theme } = useTheme();
 
-  const footerClasses = `py-5 bg-${theme} text-${theme === 'dark' ? 'white' : 'black'}`;
-  const iconClasses = `fa-3x mb-3 text-${theme === 'dark' ? 'gray-500' : 'muted'}`;
-  const devfooter = "</> by ";
-
   return (
-    <>
-      <footer className={footerClasses}>
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-lg-8 text-center">
-              <h2 className="mt-0 text-${theme === 'dark' ? 'white' : 'muted'}">Contact us</h2>
-              <hr className="divider my-4" />
+    <footer className="py-4 text-white" style={{ background: 'linear-gradient(135deg, #1a1a2e, #16213e)' }}>
+      <div className="container text-center">
+        <h3 className="text-light mb-3">Stay Connected</h3>
+        <div className="row justify-content-center">
+          <div className="col-md-4 d-flex flex-column align-items-center mb-3">
+            <FaPhone className="fa-2x mb-2 text-primary" />
+            <p className="mb-0">(+92) 61 9210134</p>
+          </div>
+          <div className="col-md-4 d-flex flex-column align-items-center mb-3">
+            <FaEnvelope className="fa-2x mb-2 text-danger" />
+            <a href="mailto:Alumini@gmail" className="text-white text-decoration-none">Alumini@gmail</a>
+          </div>
+          <div className="col-md-4 d-flex flex-column align-items-center mb-3">
+            <FaMapMarkerAlt className="fa-2x mb-2 text-success" />
+            <p className="mb-0">TGPCET, Nagpur, India</p>
+          </div>
+        </div>
+
+        <hr className="divider my-4 border-light" />
+
+        <div className="row text-center">
+          <div className="col-md-4 mb-3">
+            <h5>Quick Links</h5>
+            <ul className="list-unstyled">
+              <li><a href="/about" className="text-white text-decoration-none">About Us</a></li>
+              <li><a href="/careers" className="text-white text-decoration-none">Careers</a></li>
+              <li><a href="/events" className="text-white text-decoration-none">Events</a></li>
+            </ul>
+          </div>
+          <div className="col-md-4 mb-3">
+            <h5>Follow Us</h5>
+            <div className="d-flex justify-content-center gap-3">
+              <a href="#" className="text-white"><FaLinkedin size={25} /></a>
+              <a href="#" className="text-white"><FaTwitter size={25} /></a>
+              <a href="#" className="text-white"><FaGithub size={25} /></a>
             </div>
           </div>
-          <div className="row">
-            <div className="col-lg-4 ml-auto text-center mb-5 mb-lg-0">
-              <FaPhone className={iconClasses} />
-              <div className="text-${theme === 'dark' ? 'white' : 'black'}">(+92) 61 9210134</div>
-            </div>
-            <div className="col-lg-4 mr-auto text-center">
-              <FaEnvelope className={iconClasses} />
-              <a className="d-block" href="mailto:cs@bzu.edu.pk">cs@bzu.edu.pk</a>
+          <div className="col-md-4 mb-3">
+            <h5>Subscribe</h5>
+            <p>Get the latest updates</p>
+            <div className="input-group">
+              <input type="email" className="form-control" placeholder="Your Email" />
+              <button className="btn btn-primary">Subscribe</button>
             </div>
           </div>
         </div>
-        <br />
-        <div className="container">
-          {/* <div className={`small text-center text-${theme === 'dark' ? 'gray-400' : 'muted'}`}>
-            Copyright © 2024 - Junaid Rana | <a href="https://junaidrana.vercel.app" target="_blank">Portfolio</a>
-          </div> */}
-          <div className={`small text-center text-${theme === 'dark' ? 'gray-400' : 'muted'}`}>
-            Copyright © 2024 - CS BZU |  {devfooter} <a
-              href="https://junaidrana.vercel.app/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Junaid Rana<GoVerified style={{ fontSize: "12px", marginLeft: "2px", color:"#03b3ff" }} />
-            </a>
-          </div>
+
+        <div className="mt-4 small text-center text-light">
+          &copy; 2024 TGPCET | {'</> by '}
+          <a href="https://junaidrana.vercel.app/" target="_blank" rel="noreferrer" className="text-light text-decoration-none">
+            Technolits <GoVerified style={{ fontSize: '12px', marginLeft: '2px', color: '#03b3ff' }} />
+          </a>
         </div>
-      </footer>
-    </>
+      </div>
+    </footer>
   );
 };
 

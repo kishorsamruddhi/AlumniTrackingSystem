@@ -1,138 +1,104 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import defaultavatar from "../assets/uploads/defaultavatar.jpg"
-import { baseUrl } from '../utils/globalurl';
-
+import i1 from "../assets/img/i1.jpg";
+import i2 from "../assets/img/i2.jpg";
+import i3 from "../assets/img/i3.jpg";
+import i4 from "../assets/img/i4.jpg";
+import i5 from "../assets/img/i5.jpg";
+import i6 from "../assets/img/i6.jpg";
+import i7 from "../assets/img/i7.jpg";
+import i8 from "../assets/img/i8.jpg";
+import i9 from "../assets/img/i9.jpg";
+import i10 from "../assets/img/i10.jpg";
+import defaultavatar from "../assets/uploads/defaultavatar.jpg";
 
 const AlumniList = () => {
     const [alumniList, setAlumniList] = useState([]);
-    const [filteredAlumni, setFilteredAlumnni] = useState([]);
+    const [filteredAlumni, setFilteredAlumni] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
-        axios.get(`${baseUrl}auth/alumni_list`)
-        // axios.get("http://localhost:3000/auth/alumni_list")
-            .then((res) => {
-                console.log(res.data);
-                setAlumniList(res.data);
-            })
-            .catch((err) => console.log(err));
+        const sampleAlumni = [
+            { name: "Kajal Patle", email: "Kajal-Patle@gmail.com", branch: "Computer Science", batch: "2020", designation: "Software Engineer", verified: true, avatar: i1 },
+            { name: "Ajay Satpute", email: "jane@example.com", branch: "Electronics", batch: "2019", designation: "Project Manager", verified: false, avatar: i2 },
+            { name: "Shivani Deshmukh", email: "robert@example.com", branch: "Mechanical", batch: "2018", designation: "Senior Analyst", verified: true, avatar: i3 },
+            { name: "Priyanshi Sankhe", email: "emily@example.com", branch: "Civil Engineering", batch: "2021", designation: "Site Engineer", verified: false, avatar: i4 },
+            { name: "Soumya Singh", email: "michael@example.com", branch: "IT", batch: "2017", designation: "CTO", verified: true, avatar: i5 },
+            { name: "Harkesh Devangan", email: "sarah@example.com", branch: "Computer Science", batch: "2022", designation: "Research Scientist", verified: false, avatar: i6 },
+            { name: "Smita Burevar", email: "david@example.com", branch: "AI & ML", batch: "2020", designation: "AI Engineer", verified: true, avatar: i7 },
+            { name: "Varris Rana", email: "sophia@example.com", branch: "Computer Science", batch: "2016", designation: "Financial Analyst", verified: true, avatar: i8 },
+            { name: "Nohel Rahangade", email: "chris@example.com", branch: "Computer Science", batch: "2015", designation: "Software Engineer", verified: true, avatar: i9 },
+            { name: "Faarin Ansari", email: "jessica@example.com", branch: "Computer Science", batch: "2019", designation: "Software Engineer", verified: false, avatar: i10 }
+        ];
+        
+        localStorage.setItem("alumniList", JSON.stringify(sampleAlumni));
+        const storedAlumni = JSON.parse(localStorage.getItem("alumniList")) || [];
+        setAlumniList(storedAlumni);
+        setFilteredAlumni(storedAlumni);
     }, []);
 
     const handleSearchInputChange = (e) => {
         setSearchQuery(e.target.value);
-    }
-
-
-    useEffect(() => {
-        if (alumniList.length > 0) {
-            const filteredlist = alumniList.filter(list =>
-                list.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                list.course.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                list.batch.toString().includes(searchQuery)
-                // list.batch.toString() === searchQuery
-            );
-            setFilteredAlumnni(filteredlist);
-        }
-    }, [searchQuery, alumniList]);
+        const filteredList = alumniList.filter(list =>
+            list.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
+            list.branch.toLowerCase().includes(e.target.value.toLowerCase()) ||
+            list.batch.toString().includes(e.target.value)
+        );
+        setFilteredAlumni(filteredList);
+    };
 
     return (
         <>
-            <header className="masthead">
-                <div className="container-fluid h-100">
-                    <div className="row h-100 align-items-center justify-content-center text-center">
-                        <div className="col-lg-8 align-self-end mb-4 page-title">
-                            <h3 className="text-white">Alumnus/Alumnae List</h3>
-                            <hr className="divider my-4" />
-                        </div>
-                    </div>
-                </div>
+            <header className="masthead text-center bg-primary text-white py-4">
+                <h3 className="mb-0">Alumni List</h3>
             </header>
-            {alumniList.length > 0 && <div className="container mt-4">
-                <div className="card mb-4">
+
+            <div className="container mt-4">
+                <div className="card shadow-sm">
                     <div className="card-body">
-                        <div className="row">
-                            <div className="col-md-8">
-                                <div className="input-group mb-3">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text" id="filter-field">
-                                            <FaSearch />
-                                        </span>
-                                    </div>
-                                    <input
-                                        value={searchQuery} onChange={handleSearchInputChange}
-                                        type="text"
-                                        className="form-control"
-                                        id="filter"
-                                        placeholder="Filter name, course, batch"
-                                        aria-label="Filter"
-                                        aria-describedby="filter-field"
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-md-4">
-                                <button className="btn btn-primary btn-block" id="search">
-                                    Search
-                                </button>
-                            </div>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text">
+                                <FaSearch />
+                            </span>
+                            <input
+                                value={searchQuery}
+                                onChange={handleSearchInputChange}
+                                type="text"
+                                className="form-control"
+                                placeholder="Search by name, branch, or batch"
+                            />
                         </div>
                     </div>
                 </div>
-            </div>}
-            <div className="container-fluid mt-3 pt-2">
-                {filteredAlumni.length > 0 ? <>
-                    <div className="row">
-                        {filteredAlumni.map((a, index) => (
-                            <div className="col-md-4 mb-4" key={index}>
-                                <div className="card h-100 shadow-sm">
-                                    <center>
-                                        {a.avatar ?
-                                            <img
-                                                src={`${baseUrl}${a.avatar}`}
-                                                className="card-img-top img-fluid alimg "
-                                                alt="avatar"
-                                            /> : <>
-                                                <img
-                                                    src={defaultavatar}
-                                                    className="card-img-top img-fluid alimg "
-                                                    alt="avatar"
-                                                />
-                                            </>}
-                                    </center>
-                                    <div className="card-body">
-                                        <h5 className="card-title text-center pad-zero ">{a.name} <small>
-                                            <i className={`badge badge-primary ${a.status === 1 ? '' : 'd-none'}`}>
-                                                Verified
-                                            </i>
-                                            <i className={`badge badge-warning ${a.status === 0 ? '' : 'd-none'}`}>
-                                                Unverified
-                                            </i>
-                                        </small></h5>
+            </div>
 
-                                        <p className="card-text">
-                                            <strong>Email:</strong> {a.email}
-                                        </p>
-                                        {a.course && <p className="card-text">
-                                            <strong>Course:</strong> {a.course}
-                                        </p>}
-                                        {a.batch != "0000" && <p className="card-text">
-                                            <strong>Batch:</strong> {a.batch}
-                                        </p>}
-                                        {a.connected_to && <p className="card-text">
-                                            <strong>Currently working in/as:</strong> {a.connected_to}
-                                        </p>}
-                                    </div>
+            <div className="container mt-4">
+                <div className="row">
+                    {filteredAlumni.map((a, index) => (
+                        <div className="col-md-4 mb-4" key={index}>
+                            <div className="card h-100 shadow-sm">
+                                <center>
+                                    <img
+                                        src={a.avatar || defaultavatar}
+                                        className="card-img-top img-fluid rounded-circle mt-3"
+                                        style={{ width: '140px', height: '140px', objectFit: 'cover', border: '3px solid #ddd' }}
+                                        alt="avatar"
+                                    />
+                                </center>
+                                <div className="card-body text-center">
+                                    <h5 className="card-title">{a.name}</h5>
+                                    <p className="text-muted">{a.designation}</p>
+                                    <p><strong>Email:</strong> {a.email}</p>
+                                    <p><strong>Branch:</strong> {a.branch}</p>
+                                    <p><strong>Passout Year:</strong> {a.batch}</p>
+                                    <span className={`badge ${a.verified ? 'bg-success' : 'bg-warning'}`}>
+                                        {a.verified ? "Verified" : "Unverified"}
+                                    </span>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                </> : <>
-                    <div className="d-flex flex-column justify-content-center align-items-center">
-                        <p >{searchQuery}</p>
-                        <h4 className='text-info-emphasis'>No Data Available</h4>
-                    </div>
-                </>}
+                        </div>
+                    ))}
+                </div>
             </div>
         </>
     );
